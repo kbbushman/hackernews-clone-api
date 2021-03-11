@@ -24,5 +24,11 @@ module.exports = {
       links.push(link);
       return link;
     },
+    update: (parent, args) => {
+      const linkToUpdate = links.find((link) => link.id === args.id);
+      linkToUpdate.url = args.url ? args.url : linkToUpdate.url;
+      linkToUpdate.description = args.description ? args.description : linkToUpdate.description;
+      return linkToUpdate;
+    },
   },
 };
