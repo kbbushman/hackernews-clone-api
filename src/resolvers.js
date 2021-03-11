@@ -1,40 +1,46 @@
-let links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL'
-}];
-
-let idCount = links.length;
-
 module.exports = {
   Query: {
     info: () => 'This is the Hackernews Clone API',
-    feed: () => links,
-    link: (parent, args) => {
-      return links.find((link) => link.id === args.id);
-    }
+    feed: async (parent, args, context) => {
+      return context.prisma.link.findMany();
+    },
+    link: (parent, args, context) => {
+      return context.prisma.link.findUnique({
+        where: {
+          id: Number(args.id),
+        },
+      });
+    },
   },
   Mutation: {
-    post: (parent, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      };
-      links.push(link);
-      return link;
+    post: (parent, args, context) => {
+      const newLink = context.prisma.link.create({
+        data: {
+          url: args.url,
+          description: args.description,
+        },
+      });
+      return newLink;
     },
-    update: (parent, args) => {
-      const linkToUpdate = links.find((link) => link.id === args.id);
-      linkToUpdate.url = args.url ? args.url : linkToUpdate.url;
-      linkToUpdate.description = args.description ? args.description : linkToUpdate.description;
-      return linkToUpdate;
+    update: (parent, args, context) => {
+      const updatedLink = context.prisma.link.update({
+        where: {
+          id: Number(args.id),
+        },
+        data: {
+          url: args.url,
+          description: args.description,
+        }
+      });
+      return updatedLink;
     },
-    delete: (parent, args) => {
-      const index = links.indexOf((link) => link.id === args.id);
-      const link = links.splice(index, 1)[0];
-      console.log(link)
-      return link;
+    delete: (parent, args, context) => {
+      const deletedLink = context.prisma.link.delete({
+        where: {
+          id: Number(args.id),
+        },
+      });
+      return deletedLink;
     },
   },
 };
