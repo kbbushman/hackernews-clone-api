@@ -30,5 +30,11 @@ module.exports = {
       linkToUpdate.description = args.description ? args.description : linkToUpdate.description;
       return linkToUpdate;
     },
+    delete: (parent, args) => {
+      const index = links.indexOf((link) => link.id === args.id);
+      const link = links.splice(index, 1)[0];
+      console.log(link)
+      return link;
+    },
   },
 };
