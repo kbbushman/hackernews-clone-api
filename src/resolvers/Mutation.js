@@ -39,8 +39,46 @@ async function login(parent, args, context, info) {
   };
 }
 
+async function post(parent, args, context, info) {
+  const { userId } = context;
+
+  return await context.prisma.link.create({
+    data: {
+      url: args.url,
+      description: args.description,
+      postedBy: { connect: { id: userId } },
+    }
+  })
+}
+
+async function update(parent, args, context, info) {
+  const { userId } = context;
+
+  return await context.prisma.link.update({
+    where: {
+      id: Number(args.id),
+    },
+    data: {
+      url: args.url,
+      description: args.description,
+    }
+  });
+}
+
+async function destroy(parent, args, context, info) {
+  const { userId } = context;
+
+  return await context.prisma.link.delete({
+    where: {
+      id: Number(args.id),
+    },
+  });
+}
+
 module.exports = {
   signup,
   login,
   post,
+  update,
+  destroy,
 };
