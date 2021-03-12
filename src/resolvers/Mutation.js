@@ -10,9 +10,9 @@ async function signup(parent, args, context, info) {
 
   const password = await bcrypt.hash(args.password, 10);
 
-  const user = await context.prisma.user.create({ data: { ...args, password } });
+  const newUser = await context.prisma.user.create({ data: { ...args, password } });
 
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET);
 
   return {
     token,
