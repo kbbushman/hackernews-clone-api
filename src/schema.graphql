@@ -15,6 +15,7 @@ type Mutation {
 
 type Subscription {
   newLink: Link
+  newVote: Vote
 }
 
 type Link {
