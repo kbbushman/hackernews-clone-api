@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { getUserId } = require('../utils');
 
 async function signup(parent, args, context, info) {
   const user = await context.prisma.user.findUnique({ where: { email: args.email } });
@@ -16,7 +15,7 @@ async function signup(parent, args, context, info) {
 
   return {
     token,
-    user,
+    user: newUser,
   };
 }
 
